@@ -4,8 +4,8 @@ from django.db import models
 
 
 class TimestampedModel(models.Model):
-    updated_at = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=False)
+    created_at = models.DateTimeField(auto_now_add=False)
 
     class Meta:
         abstract = True
@@ -13,7 +13,7 @@ class TimestampedModel(models.Model):
 
 class KeyModel(TimestampedModel):
     key = models.CharField(
-        max_length=255, unique=True, db_index=True, null=False, blank=True
+        max_length=200, unique=True, db_index=True, null=False, blank=True
     )
 
     class Meta:
@@ -26,7 +26,7 @@ class KeyModel(TimestampedModel):
     def save(self, **kwargs):
         if not self.key:
             while True:
-                new_key = str(uuid.uuid4())
+                new_key = "BMS_ISE"+str(uuid.uuid4())
                 try:
                     self.__class__.objects.get(key=new_key)
                     continue
